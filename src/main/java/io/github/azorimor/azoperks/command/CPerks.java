@@ -2,6 +2,7 @@ package io.github.azorimor.azoperks.command;
 
 import io.github.azorimor.azoperks.AzoPerks;
 import io.github.azorimor.azoperks.perks.PerksManager;
+import io.github.azorimor.azoperks.utils.MessageHandler;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,9 +16,11 @@ public class CPerks implements CommandExecutor, TabCompleter {
 
     private List<String> emptyList;
     private PerksManager perksManager;
+    private MessageHandler messageHandler;
 
     public CPerks(AzoPerks instance) {
         this.perksManager = instance.getPerksManager();
+        this.messageHandler = instance.getMessageHandler();
         this.emptyList = new ArrayList<String>(0);
     }
 
@@ -25,24 +28,22 @@ public class CPerks implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
 
         if (commandSender instanceof Player) {
-
             if (commandSender.hasPermission("azoperms.command.perms")) {
-
                 if(args.length == 0){
                     Player player = (Player) commandSender;
                     player.openInventory(perksManager.getPerkPlayerByID(player.getUniqueId()).getPerkGUI());
+                    messageHandler.sendCommandOpenPerksGUI(commandSender);
                 } else {
-                    //TODO Message wrongUsage
+                    messageHandler.sendWrongCommandUsage(commandSender,command);
                 }
 
             } else {
-                //TODO Message noPermission
+                messageHandler.sendNoCommandPermission(commandSender,command);
             }
 
         } else {
-            //TODO Message noPlayer
+            messageHandler.sendNoPlayer(commandSender);
         }
-
         return true;
     }
 

@@ -21,6 +21,11 @@ public class PerksManager {
 
     public static String GUI_NAME = "§6Perks";
 
+    /**
+     * Generates the GUI to manage the perks settings.
+     * @param uuid {@link UUID} of the {@link org.bukkit.entity.Player} for who this GUI ({@link Inventory}) is generated.
+     * @return {@link Inventory} player specific generated GUI.
+     */
     public Inventory generatePerkInventoryForPlayer(UUID uuid){
         Inventory gui = Bukkit.createInventory(null,54, GUI_NAME);
 

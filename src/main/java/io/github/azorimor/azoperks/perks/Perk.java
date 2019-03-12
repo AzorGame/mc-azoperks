@@ -15,10 +15,16 @@ public enum Perk {
 
     private String permissionString;
     private ItemStack guiItem;
+    private String displayName;
 
     Perk(String permissionString, ItemStack guiItem) {
         this.permissionString = permissionString;
         this.guiItem = guiItem;
+        this.displayName = guiItem.getItemMeta().getDisplayName();
+    }
+
+    public String getDisplayName() {
+        return displayName;
     }
 
     public String getPermissionString() {

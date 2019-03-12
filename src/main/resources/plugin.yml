@@ -2,3 +2,10 @@ name: AzoPerks
 author: Azorimor
 version: 1.0.0
 main: io.github.azorimor.azoperks.AzoPerks
+commands:
+  perks:
+    description: Opens the perks gui, where you can manage your perks settings.
+    usage: perks
+  perksinfo:
+    description: Shows information about activated perks of a specific player.
+    usage: perksinfo <player>
