@@ -50,6 +50,16 @@ public class LPerksGUI implements Listener {
                                 player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,Integer.MAX_VALUE,2,false,false,false));
                             else
                                 player.removePotionEffect(PotionEffectType.JUMP);
+                        } else if(perk == Perk.NIGHT_VISION){
+                            if(requestedPerk.isActive())
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,Integer.MAX_VALUE,2,false,false,false));
+                            else
+                                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                        } else if(perk == Perk.FLY){
+                            if(requestedPerk.isActive())
+                                player.setAllowFlight(true);
+                            else
+                                player.setAllowFlight(false);
                         }
 
                         messageHandler.sendPluginMessage(player,"§7You §asuccessfully§7 changed the perkstatus for the perk: §a"+requestedPerk.getPerk().getName());

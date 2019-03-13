@@ -1,6 +1,7 @@
 package io.github.azorimor.azoperks.listener;
 
 import io.github.azorimor.azoperks.AzoPerks;
+import io.github.azorimor.azoperks.perks.Perk;
 import io.github.azorimor.azoperks.perks.PerksManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,10 +22,14 @@ public class LJoinQuit implements Listener {
     public void onJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
         perksManager.registerPlayerIfNotRegistered(player.getUniqueId());
-        if(player.hasPotionEffect(PotionEffectType.SPEED))
+        if(player.hasPotionEffect(PotionEffectType.SPEED) && !perksManager.getPerkPlayerByID(player.getUniqueId()).hasPlayerPerkActive(Perk.FAST_RUN))
             player.removePotionEffect(PotionEffectType.SPEED);
-        if(player.hasPotionEffect(PotionEffectType.JUMP))
+        if(player.hasPotionEffect(PotionEffectType.JUMP) && !perksManager.getPerkPlayerByID(player.getUniqueId()).hasPlayerPerkActive(Perk.SUPER_JUMP))
             player.removePotionEffect(PotionEffectType.JUMP);
+        if(player.hasPotionEffect(PotionEffectType.NIGHT_VISION) && !perksManager.getPerkPlayerByID(player.getUniqueId()).hasPlayerPerkActive(Perk.NIGHT_VISION))
+            player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        if(!perksManager.getPerkPlayerByID(player.getUniqueId()).hasPlayerPerkActive(Perk.FLY))
+            player.setAllowFlight(false);
     }
 
     @EventHandler

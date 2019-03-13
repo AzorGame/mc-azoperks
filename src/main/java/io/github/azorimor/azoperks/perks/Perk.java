@@ -72,6 +72,18 @@ public enum Perk {
             new ItemBuilder(Material.DIAMOND_SWORD)
                     .setDisplayName("§eDouble Damage")
                     .setLore("§3You will make much more", "§3damage to enemies.")
+                    .build()),
+    NIGHT_VISION("Nightvision",
+            "azoperks.perk.nightvision",
+            new ItemBuilder(Material.ENDER_EYE)
+                    .setDisplayName("§eNight Vision")
+                    .setLore("§3You will be able to see", "§3things more clearly at night.")
+                    .build()),
+    FLY("Fly",
+            "azoperks.perk.fly",
+            new ItemBuilder(Material.FIREWORK_ROCKET)
+                    .setDisplayName("§eFly")
+                    .setLore("§3You will be able to fly", "§3around the server.")
                     .build());
 
 

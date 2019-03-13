@@ -50,6 +50,8 @@ public class PerksManager {
         this.perkToggleGUISlots.put(15,Perk.FAST_RUN);
         this.perkToggleGUISlots.put(24,Perk.SUPER_JUMP);
         this.perkToggleGUISlots.put(33,Perk.Double_DAMAGE);
+        this.perkToggleGUISlots.put(42,Perk.NIGHT_VISION);
+        this.perkToggleGUISlots.put(51,Perk.FLY);
     }
 
 
