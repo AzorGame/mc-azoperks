@@ -1,6 +1,7 @@
 package io.github.azorimor.azoperks.perks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -15,9 +16,9 @@ public class PerkPlayer {
 
 
     public PerkPlayer(UUID playerUUID, Inventory perkGUI) { //TODO gui hier automatisch generieren
+        this.playerUUID = playerUUID;
         this.perks = loadPlayerPerks();
         this.perkGUI = perkGUI;
-        this.playerUUID = playerUUID;
     }
 
     private ArrayList<PlayerPerk> loadPlayerPerks(){
@@ -49,6 +50,15 @@ public class PerkPlayer {
                 return playerPerk;
         }
         return null;
+    }
+
+    public boolean hasPlayerPerkActive(Perk perk){
+        for (PlayerPerk playerPerk :
+                perks) {
+            if(playerPerk.getPerk() == perk)
+                return playerPerk.isActive();
+        }
+        return false;
     }
 
     public ArrayList<PlayerPerk> getPerks() {

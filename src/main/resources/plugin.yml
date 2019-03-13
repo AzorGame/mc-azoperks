@@ -2,6 +2,7 @@ name: AzoPerks
 author: Azorimor
 version: 1.0.0
 main: io.github.azorimor.azoperks.AzoPerks
+api-version: 1.13
 commands:
   perks:
     description: Opens the perks gui, where you can manage your perks settings.

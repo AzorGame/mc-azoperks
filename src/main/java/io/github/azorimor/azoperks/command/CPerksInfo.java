@@ -5,6 +5,7 @@ import io.github.azorimor.azoperks.perks.PerksManager;
 import io.github.azorimor.azoperks.perks.PlayerPerk;
 import io.github.azorimor.azoperks.utils.MessageHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -67,13 +68,13 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
 
     private void sendPlayerPerksInfo(CommandSender sender, UUID uuid, String name) {
         messageHandler.sendPluginMessage(sender, "§7§m       §r§7[§6AzoPerks - PlayerInfo§7]§m     ");
-        messageHandler.sendPluginMessage(sender, "§7Perk-information about §c" + name);
-        messageHandler.sendPluginMessage(sender, "§7Name          | Owned | Active");
+        messageHandler.sendPluginMessage(sender, "§ePerk-information about §c" + name);
+        messageHandler.sendPluginMessage(sender, "§7§lName              | Owned | Active");
         for (PlayerPerk perk :
                 perksManager.getPlayerPerksForPlayer(uuid)) {
             String owned = (perk.isOwned()) ? "§a✔" : "§c✖";
             String active = (perk.isActive()) ? "§a✔" : "§c✖";
-            messageHandler.sendPluginMessage(sender, perk.getPerk().getDisplayName() + " §7| " + owned + " §7| " + active);
+            messageHandler.sendPluginMessage(sender, ChatColor.AQUA + String.format("%-20s",perk.getPerk().getName()) + " §7| " + owned + " §7| " + active);
         }
         messageHandler.sendPluginMessage(sender, "§7§m       §r§7[§6AzoPerks - PlayerInfo§7]§m     ");
     }

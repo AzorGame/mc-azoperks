@@ -2,11 +2,14 @@ package io.github.azorimor.azoperks;
 
 import io.github.azorimor.azoperks.command.CPerks;
 import io.github.azorimor.azoperks.command.CPerksInfo;
-import io.github.azorimor.azoperks.listener.LJoin;
+import io.github.azorimor.azoperks.listener.LHandlePerks;
+import io.github.azorimor.azoperks.listener.LJoinQuit;
+import io.github.azorimor.azoperks.listener.LPerksGUI;
 import io.github.azorimor.azoperks.perks.PerksManager;
 import io.github.azorimor.azoperks.storage.file.ConfigFile;
 import io.github.azorimor.azoperks.utils.MessageHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -23,6 +26,8 @@ public class AzoPerks extends JavaPlugin {
         this.messageHandler = new MessageHandler(this);
         registerCommands();
         registerListener();
+
+        registerPlayerAfterReload();
     }
 
     @Override
@@ -42,7 +47,16 @@ public class AzoPerks extends JavaPlugin {
 
     private void registerListener(){
         PluginManager pm = Bukkit.getPluginManager();
-        pm.registerEvents(new LJoin(this), this);
+        pm.registerEvents(new LJoinQuit(this), this);
+        pm.registerEvents(new LPerksGUI(this),this);
+        pm.registerEvents(new LHandlePerks(this),this);
+    }
+
+    private void registerPlayerAfterReload(){
+        for (Player current :
+                Bukkit.getOnlinePlayers()) {
+            perksManager.registerPlayerIfNotRegistered(current.getUniqueId());
+        }
     }
 
     //<editor-fold desc="Getter">
