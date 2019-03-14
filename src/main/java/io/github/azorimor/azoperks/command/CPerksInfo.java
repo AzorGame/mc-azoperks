@@ -67,7 +67,7 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
     }
 
     private void sendPlayerPerksInfo(CommandSender sender, UUID uuid, String name) {
-        messageHandler.sendPluginMessage(sender, "§7§m       §r§7[§6AzoPerks - PlayerInfo§7]§m     ");
+        messageHandler.sendMessageBlockHeaderFooter(sender,"PlayerInfo");
         messageHandler.sendPluginMessage(sender, "§ePerk-information about §c" + name);
         messageHandler.sendPluginMessage(sender, "§7§lName              | Owned | Active");
         for (PlayerPerk perk :
@@ -76,6 +76,6 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
             String active = (perk.isActive()) ? "§a✔" : "§c✖";
             messageHandler.sendPluginMessage(sender, ChatColor.AQUA + String.format("%-20s",perk.getPerk().getName()) + " §7| " + owned + " §7| " + active);
         }
-        messageHandler.sendPluginMessage(sender, "§7§m       §r§7[§6AzoPerks - PlayerInfo§7]§m     ");
+        messageHandler.sendMessageBlockHeaderFooter(sender,"PlayerInfo");
     }
 }

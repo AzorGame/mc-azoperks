@@ -2,6 +2,7 @@ name: AzoPerks
 author: Azorimor
 version: 1.0.0
 main: io.github.azorimor.azoperks.AzoPerks
+website: https://github.com/Azorimor
 api-version: 1.13
 commands:
   perks:
@@ -10,3 +11,6 @@ commands:
   perksinfo:
     description: Shows information about activated perks of a specific player.
     usage: perksinfo <player>
+  azoperks:
+    description: Shows information about the plugin.
+    usage: azoperks

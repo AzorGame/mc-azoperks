@@ -59,4 +59,16 @@ public class MessageHandler {
     public void sendPerkChangeStatusFailure(CommandSender sender, PlayerPerk playerPerk){
         sender.sendMessage(prefix+changePerkStatusFailure.replace("%perkname%",playerPerk.getPerk().getName()).replace("%status%",playerPerk.getStatus().toString()));
     }
+
+    public void sendMessageBlockHeaderFooter(CommandSender sender, String blockName){
+        sender.sendMessage(prefix + "§7§m          §r§7[§6AzoPerks - §f"+blockName+"§7]§m          ");
+    }
+
+    public void sendMessageBlock(CommandSender sender, String blockName, String... msg){
+        sendMessageBlockHeaderFooter(sender,blockName);
+        for (int i = 0; i < msg.length; i++) {
+            sender.sendMessage(prefix + msg[i]);
+        }
+        sendMessageBlockHeaderFooter(sender,blockName);
+    }
 }
