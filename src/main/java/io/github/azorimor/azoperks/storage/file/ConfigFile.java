@@ -18,6 +18,8 @@ public class ConfigFile extends PluginFile {
         defaults.put("command.message.noPermission","&7You have &cno permission&7 to perform the command &c/%command%&7.");
         defaults.put("command.message.wrongUsage","&7You used the command &c/%command% &7the wrong way. Just try &c/%usage%&7.");
         defaults.put("command.perks.openPerksGUI","&7You &asuccessfully &7opened the perks GUI.");
+        defaults.put("perk.changestatus.success","&7The perk &a%perkname%&7 is now &a%status%&7.");
+        defaults.put("perk.changestatus.failure","&7The status of the perk &c%perkname%&7 could not be changed. It is still &c%status%&7.");
         return defaults;
     }
 }

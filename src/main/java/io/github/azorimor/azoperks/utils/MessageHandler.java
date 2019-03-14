@@ -1,13 +1,12 @@
 package io.github.azorimor.azoperks.utils;
 
 import io.github.azorimor.azoperks.AzoPerks;
+import io.github.azorimor.azoperks.perks.PlayerPerk;
 import io.github.azorimor.azoperks.storage.file.ConfigFile;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public class MessageHandler {
-
-    private final ConfigFile config;
 
     private final String prefix;
     private final String noPlayer;
@@ -16,14 +15,20 @@ public class MessageHandler {
     private final String wrongCommandUsage;
     private final String openPerksGUI;
 
+    private final String changePerkStatusSuccess;
+    private final String changePerkStatusFailure;
+
     public MessageHandler(AzoPerks instance){
-        this.config = instance.getConfigFile();
+        final ConfigFile config = instance.getConfigFile();;
 
         this.prefix = config.getColorTranslatedString("prefix");
         this.noPlayer = config.getColorTranslatedString("command.message.noPlayer");
         this.noCommandPermission = config.getColorTranslatedString("command.message.noPermission");
         this.wrongCommandUsage = config.getColorTranslatedString("command.message.wrongUsage");
         this.openPerksGUI = config.getColorTranslatedString("command.perks.openPerksGUI");
+
+        this.changePerkStatusSuccess = config.getColorTranslatedString("perk.changestatus.success");
+        this.changePerkStatusFailure = config.getColorTranslatedString("perk.changestatus.failure");
     }
 
     public void sendPluginMessage(CommandSender sender, String message){
@@ -46,5 +51,12 @@ public class MessageHandler {
 
     public void sendCommandOpenPerksGUI(CommandSender sender){
         sender.sendMessage(prefix+openPerksGUI);
+    }
+
+    public void sendPerkChangeStatusSuccess(CommandSender sender, PlayerPerk playerPerk){
+        sender.sendMessage(prefix+changePerkStatusSuccess.replace("%perkname%",playerPerk.getPerk().getName()).replace("%status%",playerPerk.getStatus().toString()));
+    }
+    public void sendPerkChangeStatusFailure(CommandSender sender, PlayerPerk playerPerk){
+        sender.sendMessage(prefix+changePerkStatusFailure.replace("%perkname%",playerPerk.getPerk().getName()).replace("%status%",playerPerk.getStatus().toString()));
     }
 }
