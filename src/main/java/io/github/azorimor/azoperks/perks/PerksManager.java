@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class PerksManager {
@@ -17,12 +16,9 @@ public class PerksManager {
     private ArrayList<PerkPlayer> perkPlayers;
     private ItemStack perkOwned, perkUnOwned, perkActivated;
     private final String GUI_NAME = "§6§lPerks";
-    private HashMap<Integer, Perk> perkToggleGUISlots; //For example (2,NoFallDmg) -> 1 is the perk item(NoFallDmg) and on 2 is the item, which needs to be clicked to toggle the perk.
 
     public PerksManager(AzoPerks instance) {
         this.perkPlayers = new ArrayList<PerkPlayer>(instance.getServer().getMaxPlayers());
-        this.perkToggleGUISlots = new HashMap<Integer, Perk>();
-        loadGUIToggleSlots();
         this.perkOwned = new ItemBuilder(Material.ROSE_RED)
                 .setDisplayName("§eOwned")
                 .setLore("§7You can use this perk.")
@@ -38,21 +34,6 @@ public class PerksManager {
 
     }
 
-    private void loadGUIToggleSlots() {
-        this.perkToggleGUISlots.put(2, Perk.NO_FALL_DAMAGE); //TODO adding other perks
-        this.perkToggleGUISlots.put(11,Perk.NO_FIRE_DAMAGE);
-        this.perkToggleGUISlots.put(20, Perk.NO_DROWNING_DAMAGE);
-        this.perkToggleGUISlots.put(29,Perk.NO_HUNGER);
-        this.perkToggleGUISlots.put(38,Perk.KEEP_INVENTORY);
-        this.perkToggleGUISlots.put(47,Perk.KEEP_XP);
-
-        this.perkToggleGUISlots.put(6,Perk.DOUBLE_XP);
-        this.perkToggleGUISlots.put(15,Perk.FAST_RUN);
-        this.perkToggleGUISlots.put(24,Perk.SUPER_JUMP);
-        this.perkToggleGUISlots.put(33,Perk.Double_DAMAGE);
-        this.perkToggleGUISlots.put(42,Perk.NIGHT_VISION);
-        this.perkToggleGUISlots.put(51,Perk.FLY);
-    }
 
 
     /**
@@ -64,38 +45,20 @@ public class PerksManager {
     public Inventory generatePerkInventoryForPlayer(UUID uuid) {
         Inventory gui = Bukkit.createInventory(null, 54, GUI_NAME);
 
-        int currentInventorySlot = 1;
-        int currentItemNumber = 1;
-
         for (Perk perk :
                 Perk.values()) {
-            if (currentItemNumber <= 6) {
-                gui.setItem(currentInventorySlot, perk.getGuiItem());
-                currentInventorySlot++;
-                PlayerPerk playerPerk = getPlayerPerkForPlayer(uuid, perk);
-                if (playerPerk.isActive())
-                    gui.setItem(currentInventorySlot, perkActivated);
-                else if (!playerPerk.isOwned())
-                    gui.setItem(currentInventorySlot, perkUnOwned);
-                else if (playerPerk.isOwned())
-                    gui.setItem(currentInventorySlot, perkOwned);
-                currentInventorySlot += 8;
-                currentItemNumber++;
-            } else {
-                if (currentItemNumber == 7)
-                    currentInventorySlot = 7;
-
-                gui.setItem(currentInventorySlot, perk.getGuiItem());
-                currentInventorySlot--;
-                PlayerPerk playerPerk = getPlayerPerkForPlayer(uuid, perk);
-                if (playerPerk.isActive())
-                    gui.setItem(currentInventorySlot, perkActivated);
-                else if (!playerPerk.isOwned())
-                    gui.setItem(currentInventorySlot, perkUnOwned);
-                else if (playerPerk.isOwned())
-                    gui.setItem(currentInventorySlot, perkOwned);
-                currentInventorySlot += 10;
-                currentItemNumber++;
+            gui.setItem(perk.getGuiItemSlot(),perk.getGuiItem());
+            PlayerPerk playerPerk = getPlayerPerkForPlayer(uuid,perk);
+            switch (playerPerk.getStatus()){
+                case ACTIVE:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkActivated);
+                    break;
+                case OWNED:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkOwned);
+                    break;
+                case NOT_OWNED:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkUnOwned);
+                    break;
             }
         }
         return gui;
@@ -116,8 +79,11 @@ public class PerksManager {
     }
 
     public Perk getPerkByToggleItem(int slot) {
-        if (perkToggleGUISlots.containsKey(slot))
-            return perkToggleGUISlots.get(slot);
+        for (Perk perk :
+                Perk.values()) {
+            if (perk.getToggleGuiItemSlot() == slot)
+                return perk;
+        }
         return null;
     }
 

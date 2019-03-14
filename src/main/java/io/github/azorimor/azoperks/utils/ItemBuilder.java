@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ItemBuilder {
 
@@ -34,8 +36,20 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder setLore(List<String> lore){
+        ItemMeta itemMeta = this.itemStack.getItemMeta();
+        itemMeta.setLore(lore);
+        this.itemStack.setItemMeta(itemMeta);
+        return this;
+    }
+
     public ItemBuilder addEnchantment(Enchantment enchantment, int level){
         this.itemStack.addUnsafeEnchantment(enchantment, level);
+        return this;
+    }
+
+    public ItemBuilder addEnchantments(Map<Enchantment,Integer> enchantments){
+        this.itemStack.addUnsafeEnchantments(enchantments);
         return this;
     }
 

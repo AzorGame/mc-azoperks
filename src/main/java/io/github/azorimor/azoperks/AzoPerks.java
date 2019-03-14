@@ -23,6 +23,7 @@ public class AzoPerks extends JavaPlugin {
         super.onEnable();
         this.perksManager = new PerksManager(this);
         this.configFile = new ConfigFile(this);
+        this.configFile.updatePerks(); //Loads values to change the perk enum constants
         this.messageHandler = new MessageHandler(this);
         registerCommands();
         registerListener();

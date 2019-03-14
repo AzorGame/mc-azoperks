@@ -1,6 +1,7 @@
 package io.github.azorimor.azoperks.storage.file;
 
 import io.github.azorimor.azoperks.AzoPerks;
+import io.github.azorimor.azoperks.perks.Perk;
 
 import java.util.HashMap;
 
@@ -18,8 +19,35 @@ public class ConfigFile extends PluginFile {
         defaults.put("command.message.noPermission","&7You have &cno permission&7 to perform the command &c/%command%&7.");
         defaults.put("command.message.wrongUsage","&7You used the command &c/%command% &7the wrong way. Just try &c/%usage%&7.");
         defaults.put("command.perks.openPerksGUI","&7You &asuccessfully &7opened the perks GUI.");
+
         defaults.put("perk.changestatus.success","&7The perk &a%perkname%&7 is now &a%status%&7.");
         defaults.put("perk.changestatus.failure","&7The status of the perk &c%perkname%&7 could not be changed. It is still &c%status%&7.");
+
         return defaults;
+    }
+
+    public void updatePerks(){
+        String path = "perk.";
+        for (Perk perk :
+                Perk.values()) {
+            if(cfg.isSet(path+perk.toString())){
+                String perkPath = path + perk.toString();
+                if(cfg.isSet(perkPath+".name")){
+                    perk.setName(getColorTranslatedString(perkPath+".name"));
+                }
+                if(cfg.isSet(perkPath+".permission")){
+                    perk.setPermissionString(cfg.getString(perkPath+".permission"));
+                }
+                if(cfg.isSet(perkPath+".guiItemSlot")){
+                    perk.setGuiItemSlot(getInt(perkPath+".guiItemSlot"));
+                }
+                if(cfg.isSet(perkPath+".toggleGuiItemSlot")){
+                    perk.setToggleGuiItemSlot(getInt(perkPath+".toggleGuiItemSlot"));
+                }
+                if(cfg.isSet(perkPath+".item")){
+                    perk.setGuiItem(getItemStack(perkPath+".item"));
+                }
+            }
+        }
     }
 }
