@@ -26,7 +26,7 @@ public abstract class PluginFile {
     FileConfiguration cfg;
     private AzoPerks instance;
 
-    public PluginFile(AzoPerks instance, String filename) {
+    PluginFile(AzoPerks instance, String filename) {
         this.instance = instance;
         this.file = new File(instance.getDataFolder(),filename);
         this.cfg = YamlConfiguration.loadConfiguration(file);
@@ -41,6 +41,10 @@ public abstract class PluginFile {
 
     protected abstract HashMap<String, Object> generateDefaultValues();
 
+    public String getString(String path){
+        return cfg.getString(path,path);
+    }
+
     public String getColorTranslatedString(String path){
         if (cfg.isSet(path))
             return ChatColor.translateAlternateColorCodes(ALT_COLOR_CHAR,cfg.getString(path));
@@ -48,18 +52,16 @@ public abstract class PluginFile {
     }
 
     public List<String> getColorTranslatedStringList(String path){
-        List<String> list;
+        List<String> returns = new ArrayList<String>();
         if(cfg.isSet(path)){
-            list = cfg.getStringList(path);
             for (String string :
-                    list) {
-                ChatColor.translateAlternateColorCodes(ALT_COLOR_CHAR,string);
+                    cfg.getStringList(path)) {
+                returns.add(ChatColor.translateAlternateColorCodes(ALT_COLOR_CHAR,string));
             }
-            return list;
         }
-        list = new ArrayList<String>(1);
-        list.add(path);
-        return list;
+        if(returns.size() == 0)
+            returns.add(path);
+        return returns;
     }
 
     public int getInt(String path){
@@ -97,6 +99,10 @@ public abstract class PluginFile {
                 .addEnchantments(getEnchantments(path+".enchantments"))
                 .setLore(getColorTranslatedStringList(path+".lore"))
                 .build();
+    }
+
+    public boolean isSet(String path){
+        return cfg.isSet(path);
     }
 
     public void saveFile(){

@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * This class is used for the ingame command <code>/perksinfo player</code>.
+ * It should show perks information for a specific player, for example whether a perk is active or not.
+ */
 public class CPerksInfo implements CommandExecutor, TabCompleter {
 
     private MessageHandler messageHandler;
@@ -70,10 +74,25 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
         messageHandler.sendMessageBlockHeaderFooter(sender,"PlayerInfo");
         messageHandler.sendPluginMessage(sender, "§ePerk-information about §c" + name);
         messageHandler.sendPluginMessage(sender, "§7§lName              | Owned | Active");
+
+        String ownedSymbolYES,ownedSymbolNO, activeSymbolYES, activeSymbolNO;
+        if(sender instanceof Player){
+            ownedSymbolYES = "§a✔";
+            ownedSymbolNO = "§c✖";
+
+            activeSymbolYES = "§a✔";
+            activeSymbolNO = "§c✖";
+        } else {
+            ownedSymbolYES = "§aYES";
+            ownedSymbolNO = "§cNO";
+
+            activeSymbolYES = "§aYES";
+            activeSymbolNO = "§cNO";
+        }
         for (PlayerPerk perk :
                 perksManager.getPlayerPerksForPlayer(uuid)) {
-            String owned = (perk.isOwned()) ? "§a✔" : "§c✖";
-            String active = (perk.isActive()) ? "§a✔" : "§c✖";
+            String owned = (perk.isOwned()) ? ownedSymbolYES : ownedSymbolNO;
+            String active = (perk.isActive()) ? activeSymbolYES : activeSymbolNO;
             messageHandler.sendPluginMessage(sender, ChatColor.AQUA + String.format("%-20s",perk.getPerk().getName()) + " §7| " + owned + " §7| " + active);
         }
         messageHandler.sendMessageBlockHeaderFooter(sender,"PlayerInfo");

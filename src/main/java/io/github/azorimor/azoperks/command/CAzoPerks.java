@@ -11,6 +11,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * {@link CAzoPerks} is the ingame command <code>/azoperks</code>. This Command displays information about the plugin,
+ * for example the version, name, website, ... .
+ */
 public class CAzoPerks implements CommandExecutor, TabCompleter {
 
     private List<String> emptyList;
@@ -23,21 +27,21 @@ public class CAzoPerks implements CommandExecutor, TabCompleter {
 
         PluginDescriptionFile pdf = instance.getDescription();
         this.messages = new String[4];
-        this.messages[0] = "§ePlugin: §f"+pdf.getName();
-        this.messages[1] = "§eVersion: §f"+pdf.getVersion();
-        this.messages[2] = "§eAuthor: §f"+pdf.getAuthors().get(0);
-        this.messages[3] = "§eWebsite: §f"+pdf.getWebsite();
+        this.messages[0] = "§ePlugin: §f" + pdf.getName();
+        this.messages[1] = "§eVersion: §f" + pdf.getVersion();
+        this.messages[2] = "§eAuthor: §f" + pdf.getAuthors().get(0);
+        this.messages[3] = "§eWebsite: §f" + pdf.getWebsite();
     }
 
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
-        if(commandSender.hasPermission("azoperks.command.azoperks")){
-            if(args.length == 0){
-                messageHandler.sendMessageBlock(commandSender,"PluginInfo", messages);
+        if (commandSender.hasPermission("azoperks.command.azoperks")) {
+            if (args.length == 0) {
+                messageHandler.sendMessageBlock(commandSender, "PluginInfo", messages);
             } else {
-                messageHandler.sendWrongCommandUsage(commandSender,command);
+                messageHandler.sendWrongCommandUsage(commandSender, command);
             }
         } else {
-            messageHandler.sendNoCommandPermission(commandSender,command);
+            messageHandler.sendNoCommandPermission(commandSender, command);
         }
         return true;
     }

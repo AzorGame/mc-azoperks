@@ -8,6 +8,9 @@ import org.bukkit.inventory.Inventory;
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * This class stores the player specific perk informations.
+ */
 public class PerkPlayer {
 
     private ArrayList<PlayerPerk> perks;
@@ -21,6 +24,10 @@ public class PerkPlayer {
         this.perkGUI = perkGUI;
     }
 
+    /**
+     * Loads all {@link PlayerPerk} information about the player.
+     * @return {@link ArrayList} with all {@link PlayerPerk} information loaded.
+     */
     private ArrayList<PlayerPerk> loadPlayerPerks(){
         ArrayList<PlayerPerk> playerPerks = new ArrayList<PlayerPerk>(Perk.values().length);
         Player player = Bukkit.getPlayer(playerUUID); //TODO Offlineplayer behandeln (UUIDFethcer verwenden)
@@ -35,14 +42,11 @@ public class PerkPlayer {
         return playerPerks;
     }
 
-    public void changePerkOwnedStatus(Perk perk, boolean owned){
-        getPlayerPerk(perk).setOwned(owned);
-    }
-
-    public void changePerkActiveStatus(Perk perk, boolean active){
-        getPlayerPerk(perk).setOwned(active);
-    }
-
+    /**
+     * Looking for the equivalent {@link PlayerPerk} with the specified {@link Perk}.
+     * @param perk {@link Perk} for which the corosponding {@link PlayerPerk} is searched.
+     * @return {@link PlayerPerk} for the {@link Perk} of the {@link PerkPlayer}
+     */
     public PlayerPerk getPlayerPerk(Perk perk){
         for (PlayerPerk playerPerk :
                 perks) {
@@ -52,15 +56,16 @@ public class PerkPlayer {
         return null;
     }
 
+    /**
+     * Checks whether a specifig {@link PlayerPerk} is active or not.
+     * @param perk {@link Perk}, for which the {@link PlayerPerk} is searched.
+     * @return <code>true</code>, if the {@link PlayerPerk} is active.
+     */
     public boolean hasPlayerPerkActive(Perk perk){
-        for (PlayerPerk playerPerk :
-                perks) {
-            if(playerPerk.getPerk() == perk)
-                return playerPerk.isActive();
-        }
-        return false;
+        return getPlayerPerk(perk).isActive();
     }
 
+    //<editor-fold desc="Getter and Setter">
     public ArrayList<PlayerPerk> getPerks() {
         return perks;
     }
@@ -76,4 +81,5 @@ public class PerkPlayer {
     public UUID getPlayerUUID() {
         return playerUUID;
     }
+    //</editor-fold>
 }

@@ -2,22 +2,31 @@ package io.github.azorimor.azoperks.perks;
 
 
 import io.github.azorimor.azoperks.AzoPerks;
+import io.github.azorimor.azoperks.storage.file.ConfigFile;
 import io.github.azorimor.azoperks.utils.ItemBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
+/**
+ * This class manages all {@link PerkPlayer}. And many features of the perk system.
+ */
 public class PerksManager {
 
     private ArrayList<PerkPlayer> perkPlayers;
     private ItemStack perkOwned, perkUnOwned, perkActivated;
     private final String GUI_NAME = "§6§lPerks";
+    private AzoPerks instance;
 
     public PerksManager(AzoPerks instance) {
+        this.instance = instance;
         this.perkPlayers = new ArrayList<PerkPlayer>(instance.getServer().getMaxPlayers());
         this.perkOwned = new ItemBuilder(Material.ROSE_RED)
                 .setDisplayName("§eOwned")
@@ -31,7 +40,6 @@ public class PerksManager {
                 .setDisplayName("§aActive")
                 .setLore("§7You are using this perk right now.")
                 .build();
-
     }
 
 
@@ -133,6 +141,47 @@ public class PerksManager {
         return getPerkPlayerByID(uuid) != null;
     }
 
+    public void updateGUIToggleItems(){
+        ConfigFile config = instance.getConfigFile();
+        String path = "perk.toggleItem";
+        if(config.isSet(path+".owned"))
+            this.perkOwned = new ItemBuilder(config.getItemStack(path+".owned")).build();
+        if(config.isSet(path+".unowned"))
+            this.perkOwned = new ItemBuilder(config.getItemStack(path+".unowned")).build();
+        if(config.isSet(path+".active"))
+            this.perkOwned = new ItemBuilder(config.getItemStack(path+".active")).build();
+    }
+
+    public void updatePotionEffects(Player player, PlayerPerk requestedPerk){
+        Perk perk = requestedPerk.getPerk();
+        if (perk == Perk.FAST_RUN) {
+            if (requestedPerk.isActive())
+                player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2, false, false, false));
+            else
+                player.removePotionEffect(PotionEffectType.SPEED);
+        } else if (perk == Perk.SUPER_JUMP) {
+            if (requestedPerk.isActive())
+                player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, Integer.MAX_VALUE, 2, false, false, false));
+            else
+                player.removePotionEffect(PotionEffectType.JUMP);
+        } else if (perk == Perk.NIGHT_VISION) {
+            if (requestedPerk.isActive())
+                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 2, false, false, false));
+            else
+                player.removePotionEffect(PotionEffectType.NIGHT_VISION);
+        } else if (perk == Perk.FLY) {
+            if (requestedPerk.isActive())
+                player.setAllowFlight(true);
+            else
+                player.setAllowFlight(false);
+        } else if (perk == Perk.FAST_MINING) {
+            if (requestedPerk.isActive())
+                player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, Integer.MAX_VALUE, 2, false, false, false));
+            else
+                player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+        }
+    }
+
     //<editor-fold desc="Almost everything here must be updated for performance">
     public PerkPlayer getPerkPlayerByID(UUID uuid) {
         for (PerkPlayer perkPlayer :
@@ -209,6 +258,7 @@ public class PerksManager {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Getter and Setter">
     public ArrayList<PerkPlayer> getPerkPlayers() {
         return perkPlayers;
     }
@@ -228,4 +278,7 @@ public class PerksManager {
     public ItemStack getPerkActivated() {
         return perkActivated;
     }
+    //</editor-fold>
+
+
 }

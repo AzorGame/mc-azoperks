@@ -84,7 +84,13 @@ public enum Perk {
             new ItemBuilder(Material.FIREWORK_ROCKET)
                     .setDisplayName("§eFly")
                     .setLore("§3You will be able to fly", "§3around the server.")
-                    .build(),52,51);
+                    .build(),52,51),
+    FAST_MINING("Fast Mining",
+                "azoperks.perk.fastmining",
+                new ItemBuilder(Material.GOLDEN_PICKAXE)
+                    .setDisplayName("§eFast Mining")
+                    .setLore("§3You can break blocks", "§3faster than before.")
+                    .build(),13,22);
 
 
     private String permissionString;
