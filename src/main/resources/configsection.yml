@@ -1,0 +1,18 @@
+perk:
+  toggleItem:
+    owned:
+      material: ROSE_RED
+      displayname: '&eOwned'
+      enchantments:
+        efficiency: 2
+      lore:
+      - '&2You own this item.'
+      - '&2But you &cdid not&2 activate it.'
+    active:
+      material: LIME_DYE
+      displayname: '&aActive'
+      enchantments:
+        efficiency: 10
+      lore:
+      - '&2This perk is active.'
+      - '&2You can benefit from it.'
