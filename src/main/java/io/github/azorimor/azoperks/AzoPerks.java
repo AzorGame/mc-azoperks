@@ -10,19 +10,25 @@ import io.github.azorimor.azoperks.listener.LPerksGUI;
 import io.github.azorimor.azoperks.perks.PerksManager;
 import io.github.azorimor.azoperks.storage.file.ConfigFile;
 import io.github.azorimor.azoperks.utils.MessageHandler;
+import io.github.azorimor.azoperks.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.IOException;
 
 public class AzoPerks extends JavaPlugin {
 
     private PerksManager perksManager;
     private ConfigFile configFile;
     private MessageHandler messageHandler;
+    private UpdateChecker updateChecker;
+
     @Override
     public void onEnable() {
         super.onEnable();
+        this.updateChecker = new UpdateChecker(65679,this);
         this.perksManager = new PerksManager(this);
         this.configFile = new ConfigFile(this);
         this.configFile.updatePerks(); //Loads values to change the perk enum constants
@@ -32,6 +38,8 @@ public class AzoPerks extends JavaPlugin {
         registerListener();
 
         registerPlayerAfterReload();
+
+        checkUpdates();
     }
 
     @Override
@@ -71,6 +79,24 @@ public class AzoPerks extends JavaPlugin {
         }
     }
 
+    /**
+     * Checks for updates and shows messages in the console.
+     */
+    private void checkUpdates() {
+        getLogger().info("Checking for updates...");
+        try {
+            if(updateChecker.checkForUpdate()){
+                getLogger().info("Updates found. Please visit the website to download it.");
+                getLogger().info(updateChecker.getResourceUrl());
+            } else {
+                getLogger().info("No updates found. You are up to date.");
+            }
+        } catch (IOException e) {
+            getLogger().info("Could not check for updates. Please check your internet connection.");
+        }
+    }
+
+
     //<editor-fold desc="Getter">
     public PerksManager getPerksManager() {
         return perksManager;
@@ -83,5 +109,10 @@ public class AzoPerks extends JavaPlugin {
     public MessageHandler getMessageHandler() {
         return messageHandler;
     }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
+    }
+
     //</editor-fold>
 }

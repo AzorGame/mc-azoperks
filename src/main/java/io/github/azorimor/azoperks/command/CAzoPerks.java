@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.plugin.PluginDescriptionFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +27,21 @@ public class CAzoPerks implements CommandExecutor, TabCompleter {
         this.emptyList = new ArrayList<String>(0);
 
         PluginDescriptionFile pdf = instance.getDescription();
-        this.messages = new String[4];
+        this.messages = new String[6];
         this.messages[0] = "§ePlugin: §f" + pdf.getName();
         this.messages[1] = "§eVersion: §f" + pdf.getVersion();
         this.messages[2] = "§eAuthor: §f" + pdf.getAuthors().get(0);
         this.messages[3] = "§eWebsite: §f" + pdf.getWebsite();
+        try {
+            if(instance.getUpdateChecker().checkForUpdate()){
+                this.messages[4] = "§eUpdate: §2available";
+                this.messages[5] = "§7"+instance.getUpdateChecker().getResourceUrl();
+            } else {
+                this.messages[4] = "§eUpdate: §cnone";
+            }
+        } catch (IOException e) {
+            this.messages[4] = "§eUpdate: §fCould not check for updates.";
+        }
     }
 
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
