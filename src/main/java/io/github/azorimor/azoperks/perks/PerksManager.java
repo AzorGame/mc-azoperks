@@ -61,7 +61,7 @@ public class PerksManager {
                 case ACTIVE:
                     gui.setItem(perk.getToggleGuiItemSlot(),perkActivated);
                     break;
-                case OWNED:
+                case NOT_ACTIVE:
                     gui.setItem(perk.getToggleGuiItemSlot(),perkOwned);
                     break;
                 case NOT_OWNED:
@@ -107,14 +107,14 @@ public class PerksManager {
 
         Inventory gui = getPerkPlayerByID(uuid).getPerkGUI();
         switch (playerPerk.getStatus()) {
-            case OWNED:
+            case NOT_ACTIVE:
                 gui.setItem(slot, perkActivated);
                 playerPerk.setStatus(PlayerPerkStatus.ACTIVE);
                 return true;
             case ACTIVE:
                 if (playerPerk.isOwned()) {
                     gui.setItem(slot, perkOwned);
-                    playerPerk.setStatus(PlayerPerkStatus.OWNED);
+                    playerPerk.setStatus(PlayerPerkStatus.NOT_ACTIVE);
                 } else {
                     gui.setItem(slot,perkUnOwned);
                     playerPerk.setStatus(PlayerPerkStatus.NOT_OWNED);
@@ -147,9 +147,9 @@ public class PerksManager {
         if(config.isSet(path+".owned"))
             this.perkOwned = new ItemBuilder(config.getItemStack(path+".owned")).build();
         if(config.isSet(path+".unowned"))
-            this.perkOwned = new ItemBuilder(config.getItemStack(path+".unowned")).build();
+            this.perkUnOwned = new ItemBuilder(config.getItemStack(path+".unowned")).build();
         if(config.isSet(path+".active"))
-            this.perkOwned = new ItemBuilder(config.getItemStack(path+".active")).build();
+            this.perkActivated = new ItemBuilder(config.getItemStack(path+".active")).build();
     }
 
     public void updatePotionEffects(Player player, PlayerPerk requestedPerk){
@@ -196,16 +196,13 @@ public class PerksManager {
         return getPlayerPerkForPlayer(toCheck, perk).isActive();
     }
 
-    public void changeActivePerkStatus(UUID playerID, Perk perk, boolean avtive) {
-        getPlayerPerkForPlayer(playerID, perk).setActive(true);
+    public void changePerkStatus(UUID playerID, Perk perk, PlayerPerkStatus status) {
+        getPlayerPerkForPlayer(playerID,perk).setStatus(status);
     }
 
-    public boolean isPerkOwned(UUID playerID, Perk perk) {
-        return getPlayerPerkForPlayer(playerID, perk).isOwned();
-    }
 
-    public void changeOwnedPerkStatus(UUID playerID, Perk perk, boolean owned) {
-        getPlayerPerkForPlayer(playerID, perk).setOwned(owned);
+    public boolean togglePerkStatus(UUID playerID, Perk perk){
+        return getPlayerPerkForPlayer(playerID,perk).togglePerkStatus();
     }
 
     public ArrayList<PlayerPerk> getAllOwnedPlayerPerksForPlayer(UUID playerID) {

@@ -79,7 +79,7 @@ public class LHandlePerks implements Listener {
         if(event.getDamager() instanceof  Player){
             Player player = (Player) event.getDamager();
             PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(player.getUniqueId());
-            if(perkPlayer.hasPlayerPerkActive(Perk.Double_DAMAGE)){
+            if(perkPlayer.hasPlayerPerkActive(Perk.DOUBLE_DAMAGE)){
                 event.setDamage(event.getDamage() * 2);
             }
         }

@@ -1,5 +1,5 @@
 package io.github.azorimor.azoperks.perks;
 
 public enum PlayerPerkStatus {
-    ACTIVE,OWNED,NOT_OWNED
+    ACTIVE, NOT_ACTIVE,NOT_OWNED
 }

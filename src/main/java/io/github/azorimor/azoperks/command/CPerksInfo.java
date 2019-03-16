@@ -11,6 +11,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,10 +62,12 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
 
         switch (args.length) {
             case 1:
-                for (Player player :
+                List<String> playernames = new ArrayList<String>(Bukkit.getOnlinePlayers().size());
+                for (Player online :
                         Bukkit.getOnlinePlayers()) {
-                    completions.add(player.getName());
+                    playernames.add(online.getName());
                 }
+                StringUtil.copyPartialMatches(args[0],playernames,completions);
                 break;
         }
         return completions;
@@ -73,7 +76,7 @@ public class CPerksInfo implements CommandExecutor, TabCompleter {
     private void sendPlayerPerksInfo(CommandSender sender, UUID uuid, String name) {
         messageHandler.sendMessageBlockHeaderFooter(sender,"PlayerInfo");
         messageHandler.sendPluginMessage(sender, "§ePerk-information about §c" + name);
-        messageHandler.sendPluginMessage(sender, "§7§lName              | Owned | Active");
+        messageHandler.sendPluginMessage(sender, "§7§lName                 | Owned | Active");
 
         String ownedSymbolYES,ownedSymbolNO, activeSymbolYES, activeSymbolNO;
         if(sender instanceof Player){

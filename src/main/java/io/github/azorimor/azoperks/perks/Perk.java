@@ -67,7 +67,7 @@ public enum Perk {
                     .setDisplayName("§eSuper Jump")
                     .setLore("§3You will jump", "§3much higher.")
                     .build(),25,24),
-    Double_DAMAGE("Double Damage",
+    DOUBLE_DAMAGE("Double Damage",
             "azoperks.perk.doubledamage",
             new ItemBuilder(Material.DIAMOND_SWORD)
                     .setDisplayName("§eDouble Damage")

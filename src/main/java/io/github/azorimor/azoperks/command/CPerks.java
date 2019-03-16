@@ -33,7 +33,7 @@ public class CPerks implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
 
         if (commandSender instanceof Player) {
-            if (commandSender.hasPermission("azoperks.command.perms")) {
+            if (commandSender.hasPermission("azoperks.command.perks")) {
                 if (args.length == 0) {
                     Player player = (Player) commandSender;
                     player.openInventory(perksManager.getPerkPlayerByID(player.getUniqueId()).getPerkGUI());

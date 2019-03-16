@@ -15,7 +15,7 @@ public class PlayerPerk {
         if(isActive)
             status = PlayerPerkStatus.ACTIVE;
         else if(isOwned)
-            status = PlayerPerkStatus.OWNED;
+            status = PlayerPerkStatus.NOT_ACTIVE;
         else status = PlayerPerkStatus.NOT_OWNED;
     }
 
@@ -47,10 +47,23 @@ public class PlayerPerk {
         this.status = status;
         if(status == PlayerPerkStatus.ACTIVE)
             this.isActive = true;
-        else if(status == PlayerPerkStatus.OWNED)
+        else if(status == PlayerPerkStatus.NOT_ACTIVE)
             this.isActive = false;
         else{
             this.isOwned = false;
         }
+    }
+
+    public boolean togglePerkStatus(){
+        if(status == PlayerPerkStatus.NOT_ACTIVE){
+            status = PlayerPerkStatus.ACTIVE;
+            setActive(true);
+            return true;
+        } else if(status == PlayerPerkStatus.ACTIVE){
+            status = PlayerPerkStatus.NOT_ACTIVE;
+            setActive(false);
+            return true;
+        }
+        return false;
     }
 }

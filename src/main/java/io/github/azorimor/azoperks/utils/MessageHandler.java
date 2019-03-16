@@ -14,6 +14,7 @@ public class MessageHandler {
     private final String noCommandPermission;
     private final String wrongCommandUsage;
     private final String openPerksGUI;
+    private final String noPerk;
 
     private final String changePerkStatusSuccess;
     private final String changePerkStatusFailure;
@@ -26,6 +27,7 @@ public class MessageHandler {
         this.noCommandPermission = config.getColorTranslatedString("command.message.noPermission");
         this.wrongCommandUsage = config.getColorTranslatedString("command.message.wrongUsage");
         this.openPerksGUI = config.getColorTranslatedString("command.perks.openPerksGUI");
+        this.noPerk = config.getColorTranslatedString("command.perk.noPerk");
 
         this.changePerkStatusSuccess = config.getColorTranslatedString("perk.changestatus.success");
         this.changePerkStatusFailure = config.getColorTranslatedString("perk.changestatus.failure");
@@ -70,5 +72,9 @@ public class MessageHandler {
             sender.sendMessage(prefix + msg[i]);
         }
         sendMessageBlockHeaderFooter(sender,blockName);
+    }
+
+    public void sendNoPerk(CommandSender sender, String noPerkArgument){
+        sender.sendMessage(prefix + noPerk.replace("%noperk%",noPerkArgument));
     }
 }

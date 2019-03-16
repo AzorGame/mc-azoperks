@@ -1,6 +1,7 @@
 package io.github.azorimor.azoperks;
 
 import io.github.azorimor.azoperks.command.CAzoPerks;
+import io.github.azorimor.azoperks.command.CPerk;
 import io.github.azorimor.azoperks.command.CPerks;
 import io.github.azorimor.azoperks.command.CPerksInfo;
 import io.github.azorimor.azoperks.listener.LHandlePerks;
@@ -50,6 +51,10 @@ public class AzoPerks extends JavaPlugin {
         CAzoPerks cAzoPerks = new CAzoPerks(this);
         getCommand("azoperks").setExecutor(cAzoPerks);
         getCommand("azoperks").setTabCompleter(cAzoPerks);
+
+        CPerk cPerk = new CPerk(this);
+        getCommand("perk").setExecutor(cPerk);
+        getCommand("perk").setTabCompleter(cPerk);
     }
 
     private void registerListener(){
