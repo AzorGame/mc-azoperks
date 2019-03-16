@@ -46,6 +46,7 @@ public class UpdateChecker {
         return !plugin.getDescription().getVersion().equals(newVersion);
     }
 
-
-
+    public String getNewVersion() {
+        return newVersion;
+    }
 }

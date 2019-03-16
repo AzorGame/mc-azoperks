@@ -86,7 +86,7 @@ public class AzoPerks extends JavaPlugin {
         getLogger().info("Checking for updates...");
         try {
             if(updateChecker.checkForUpdate()){
-                getLogger().info("Updates found. Please visit the website to download it.");
+                getLogger().info("Updates found. Please visit the website to download it. (" + updateChecker.getNewVersion() + ")");
                 getLogger().info(updateChecker.getResourceUrl());
             } else {
                 getLogger().info("No updates found. You are up to date.");

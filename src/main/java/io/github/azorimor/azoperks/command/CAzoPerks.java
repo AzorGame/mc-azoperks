@@ -34,7 +34,7 @@ public class CAzoPerks implements CommandExecutor, TabCompleter {
         this.messages[3] = "§eWebsite: §f" + pdf.getWebsite();
         try {
             if(instance.getUpdateChecker().checkForUpdate()){
-                this.messages[4] = "§eUpdate: §2available";
+                this.messages[4] = "§eUpdate: §2available §7(" + instance.getUpdateChecker().getNewVersion()+")";
                 this.messages[5] = "§7"+instance.getUpdateChecker().getResourceUrl();
             } else {
                 this.messages[4] = "§eUpdate: §cnone";
