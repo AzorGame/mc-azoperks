@@ -10,29 +10,33 @@
 
 
     <repositories>
+        <!-- Spigot -->
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <!-- PlotSquared -->
+        <repository>
+            <id>incendo-repo</id>
+            <url>https://incendo.org/mvn/</url>
         </repository>
     </repositories>
 
 
     <dependencies>
         <!--Spigot API-->
-        <!--You only need one of the two, don't put both. Spigot is recommended.-->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <!--Bukkit API-->
-        <!--You only need one of the two, don't put both. Spigot is recommended.-->
+
+        <!--PlotSquared API-->
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>PlotSquared</artifactId>
+            <version>4</version>
         </dependency>
 
     </dependencies>

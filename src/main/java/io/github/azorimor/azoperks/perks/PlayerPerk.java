@@ -31,10 +31,6 @@ public class PlayerPerk {
         return isOwned;
     }
 
-    public void setOwned(boolean owned) {
-        isOwned = owned;
-    }
-
     public Perk getPerk() {
         return perk;
     }

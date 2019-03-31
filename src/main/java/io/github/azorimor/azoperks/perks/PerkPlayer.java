@@ -16,12 +16,14 @@ public class PerkPlayer {
     private ArrayList<PlayerPerk> perks;
     private Inventory perkGUI;
     private UUID playerUUID;
+    private Player player;
 
 
     public PerkPlayer(UUID playerUUID, Inventory perkGUI) { //TODO gui hier automatisch generieren
         this.playerUUID = playerUUID;
         this.perks = loadPlayerPerks();
         this.perkGUI = perkGUI;
+        this.player = Bukkit.getPlayer(playerUUID);
     }
 
     /**
@@ -61,8 +63,14 @@ public class PerkPlayer {
      * @param perk {@link Perk}, for which the {@link PlayerPerk} is searched.
      * @return <code>true</code>, if the {@link PlayerPerk} is active.
      */
+    @Deprecated
+    //Old Method used before implementing plotsquared support
     public boolean hasPlayerPerkActive(Perk perk){
         return getPlayerPerk(perk).isActive();
+    }
+
+    public boolean isPlayerPerkActive(Perk perk){
+        return getPlayerPerk(perk).isActive() && perk.getPerkAreaManager().isPerkUsedInAllowedArea(player);
     }
 
     //<editor-fold desc="Getter and Setter">

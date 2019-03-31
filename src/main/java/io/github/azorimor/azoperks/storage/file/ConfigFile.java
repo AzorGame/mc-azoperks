@@ -2,6 +2,8 @@ package io.github.azorimor.azoperks.storage.file;
 
 import io.github.azorimor.azoperks.AzoPerks;
 import io.github.azorimor.azoperks.perks.Perk;
+import io.github.azorimor.azoperks.perks.PerkArea;
+import io.github.azorimor.azoperks.perks.PerkAreaManager;
 
 import java.util.HashMap;
 
@@ -47,6 +49,18 @@ public class ConfigFile extends PluginFile {
                 }
                 if(cfg.isSet(perkPath+".item")){
                     perk.setGuiItem(getItemStack(perkPath+".item"));
+                }
+                if(cfg.isSet(perkPath+".activeArea")){
+                    try {
+                        perk.getPerkAreaManager().setActiveArea(PerkArea.valueOf(cfg.getString(perkPath+".activeArea").toUpperCase()));
+                    } catch (IllegalArgumentException e) {
+                        instance.getLogger().info("Invalid PerksArea found in the file: "
+                                + file.getAbsolutePath() + ". At the path: "
+                                + perkPath+".activeArea . Try see the documentation for valid values. For example: GLOBAL, PLOT");
+                    }
+                }
+                if(cfg.isSet(perkPath+".activeWorlds")){
+                    perk.getPerkAreaManager().setPerkActiveWorlds(getStringList(perkPath+".activeWorlds"));
                 }
             }
         }

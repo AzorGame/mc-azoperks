@@ -28,17 +28,17 @@ public class LHandlePerks implements Listener {
     public void onDamage(EntityDamageEvent event) {
         if(event.getEntity() instanceof Player){
             PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(event.getEntity().getUniqueId());
-            if (perkPlayer.hasPlayerPerkActive(Perk.NO_FALL_DAMAGE)) {
+            if (perkPlayer.isPlayerPerkActive(Perk.NO_FALL_DAMAGE)) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL)
                     event.setCancelled(true);
             }
-            if (perkPlayer.hasPlayerPerkActive(Perk.NO_FIRE_DAMAGE)) {
+            if (perkPlayer.isPlayerPerkActive(Perk.NO_FIRE_DAMAGE)) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FIRE ||
                         event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK ||
                         event.getCause() == EntityDamageEvent.DamageCause.LAVA)
                     event.setCancelled(true);
             }
-            if (perkPlayer.hasPlayerPerkActive(Perk.NO_DROWNING_DAMAGE)) {
+            if (perkPlayer.isPlayerPerkActive(Perk.NO_DROWNING_DAMAGE)) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.DROWNING)
                     event.setCancelled(true);
             }
@@ -49,7 +49,7 @@ public class LHandlePerks implements Listener {
     public void onHunger(FoodLevelChangeEvent event){
         if(event.getEntity() instanceof Player){
             PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(event.getEntity().getUniqueId());
-            if(perkPlayer.hasPlayerPerkActive(Perk.NO_HUNGER)){
+            if(perkPlayer.isPlayerPerkActive(Perk.NO_HUNGER)){
                 event.setCancelled(true);
             }
         }
@@ -58,10 +58,10 @@ public class LHandlePerks implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event){
         PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(event.getEntity().getUniqueId());
-        if(perkPlayer.hasPlayerPerkActive(Perk.KEEP_INVENTORY)){
+        if(perkPlayer.isPlayerPerkActive(Perk.KEEP_INVENTORY)){
             event.setKeepInventory(true);
         }
-        if(perkPlayer.hasPlayerPerkActive(Perk.KEEP_XP)){
+        if(perkPlayer.isPlayerPerkActive(Perk.KEEP_XP)){
             event.setKeepLevel(true);
         }
     }
@@ -69,7 +69,7 @@ public class LHandlePerks implements Listener {
     @EventHandler
     public void onExPChange(PlayerExpChangeEvent event){
         PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(event.getPlayer().getUniqueId());
-        if(perkPlayer.hasPlayerPerkActive(Perk.DOUBLE_XP)){
+        if(perkPlayer.isPlayerPerkActive(Perk.DOUBLE_XP)){
             event.setAmount(event.getAmount() * 2);
         }
     }
@@ -79,7 +79,7 @@ public class LHandlePerks implements Listener {
         if(event.getDamager() instanceof  Player){
             Player player = (Player) event.getDamager();
             PerkPlayer perkPlayer = perksManager.getPerkPlayerByID(player.getUniqueId());
-            if(perkPlayer.hasPlayerPerkActive(Perk.DOUBLE_DAMAGE)){
+            if(perkPlayer.isPlayerPerkActive(Perk.DOUBLE_DAMAGE)){
                 event.setDamage(event.getDamage() * 2);
             }
         }

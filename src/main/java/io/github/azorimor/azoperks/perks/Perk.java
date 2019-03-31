@@ -100,12 +100,16 @@ public enum Perk {
     private int guiItemSlot;
     private int toggleGuiItemSlot;
 
+    private PerkAreaManager perkAreaManager;
+
     Perk(String name, String permissionString, ItemStack guiItem,int guiItemSlot, int toggleGuiItemSlot) {
         this.permissionString = permissionString;
         this.name = name;
         this.guiItem = guiItem;
         this.guiItemSlot = guiItemSlot;
         this.toggleGuiItemSlot = toggleGuiItemSlot;
+
+        this.perkAreaManager = new PerkAreaManager();
     }
 
     public String getName() {
@@ -146,5 +150,13 @@ public enum Perk {
 
     public void setToggleGuiItemSlot(int toggleGuiItemSlot) {
         this.toggleGuiItemSlot = toggleGuiItemSlot;
+    }
+
+    public PerkAreaManager getPerkAreaManager() {
+        return perkAreaManager;
+    }
+
+    public void setPerkAreaManager(PerkAreaManager perkAreaManager) {
+        this.perkAreaManager = perkAreaManager;
     }
 }

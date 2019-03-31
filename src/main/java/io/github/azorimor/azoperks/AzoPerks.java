@@ -13,6 +13,7 @@ import io.github.azorimor.azoperks.utils.MessageHandler;
 import io.github.azorimor.azoperks.utils.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +25,7 @@ public class AzoPerks extends JavaPlugin {
     private ConfigFile configFile;
     private MessageHandler messageHandler;
     private UpdateChecker updateChecker;
+    private boolean usePlotSuqared;
 
     @Override
     public void onEnable() {
@@ -34,6 +36,9 @@ public class AzoPerks extends JavaPlugin {
         this.configFile.updatePerks(); //Loads values to change the perk enum constants
         this.perksManager.updateGUIToggleItems();
         this.messageHandler = new MessageHandler(this);
+
+        registerPlotSquared();
+
         registerCommands();
         registerListener();
 
@@ -79,6 +84,17 @@ public class AzoPerks extends JavaPlugin {
         }
     }
 
+    private void registerPlotSquared(){
+        Plugin plotSquared = getServer().getPluginManager().getPlugin("PlotSquared");
+        if(plotSquared == null){
+            this.usePlotSuqared = false;
+            getLogger().info("PlotSquared plugin not found. AzoPerks supports no plot operations now.");
+        }else{
+            this.usePlotSuqared = true;
+            getLogger().info("PlotSquared plugin found. AzoPerks supports plot operations now.");
+        }
+    }
+
     /**
      * Checks for updates and shows messages in the console.
      */
@@ -112,6 +128,10 @@ public class AzoPerks extends JavaPlugin {
 
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
+    }
+
+    public boolean isUsePlotSuqared() {
+        return usePlotSuqared;
     }
 
     //</editor-fold>
