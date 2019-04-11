@@ -27,7 +27,7 @@ public class PerkAreaManager {
      */
     public PerkAreaManager() {
         this.activeArea = PerkArea.GLOBAL;
-        this.perkActiveWorlds = null;
+        this.perkActiveWorlds = new ArrayList<String>(1);
     }
 
     /**
@@ -36,6 +36,9 @@ public class PerkAreaManager {
      * @return <code>true</code>, if the {@link Player} is in an area, where the perk is active.
      */
     public boolean isPerkUsedInAllowedArea(Player player) {
+
+        if(player.hasPermission("azoperks.perks.bypassarea"))
+            return true;
 
         switch (activeArea) {
             case GLOBAL:
@@ -58,6 +61,8 @@ public class PerkAreaManager {
      */
     private boolean isPlotUseAllowed(Player player) {
         PlotPlayer plotPlayer = PlotPlayer.wrap(player);
+        if(plotPlayer.getCurrentPlot() == null)
+            return false;
         return plotPlayer.getCurrentPlot().isAdded(plotPlayer.getUUID());
     }
 
@@ -72,7 +77,6 @@ public class PerkAreaManager {
                 perkActiveWorlds) {
             if (world.equalsIgnoreCase(perkUsedWorld))
                 return true;
-
         }
         return false;
     }
@@ -83,5 +87,18 @@ public class PerkAreaManager {
 
     public void setPerkActiveWorlds(List<String> perkActiveWorlds) {
         this.perkActiveWorlds = (perkActiveWorlds == null) ? new ArrayList<String>(4) : perkActiveWorlds;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("PerkArea: ").append(activeArea).append("\n")
+                .append("PerkActiveWorlds: ").append('[');
+        for (String worldName :
+                perkActiveWorlds) {
+            builder.append(worldName).append(" ");
+        }
+        builder.append(']');
+        return builder.toString();
     }
 }

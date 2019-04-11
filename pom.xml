@@ -20,6 +20,12 @@
             <id>incendo-repo</id>
             <url>https://incendo.org/mvn/</url>
         </repository>
+
+        <!-- WorldEdit -->
+        <repository>
+            <id>sk80q</id>
+            <url>http://maven.sk89q.com/artifactory/repo/</url>
+        </repository>
     </repositories>
 
 
@@ -37,9 +43,9 @@
             <groupId>com.github.intellectualsites.plotsquared</groupId>
             <artifactId>PlotSquared</artifactId>
             <version>4</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
-
 
 </project>

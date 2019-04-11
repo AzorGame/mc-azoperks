@@ -5,6 +5,7 @@ import io.github.azorimor.azoperks.AzoPerks;
 import io.github.azorimor.azoperks.storage.file.ConfigFile;
 import io.github.azorimor.azoperks.utils.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class PerksManager {
 
     private ArrayList<PerkPlayer> perkPlayers;
     private ItemStack perkOwned, perkUnOwned, perkActivated;
-    private final String GUI_NAME = "§6§lPerks";
+    public static final String GUI_NAME = "§6§lPerks";
     private AzoPerks instance;
 
     public PerksManager(AzoPerks instance) {
@@ -44,29 +45,29 @@ public class PerksManager {
     }
 
 
-
     /**
      * Generates the GUI to manage the perks settings.
      *
      * @param uuid {@link UUID} of the {@link org.bukkit.entity.Player} for who this GUI ({@link Inventory}) is generated.
      * @return {@link Inventory} player specific generated GUI.
      */
+    @Deprecated
     public Inventory generatePerkInventoryForPlayer(UUID uuid) {
         Inventory gui = Bukkit.createInventory(null, 54, GUI_NAME);
 
         for (Perk perk :
                 Perk.values()) {
-            gui.setItem(perk.getGuiItemSlot(),perk.getGuiItem());
-            PlayerPerk playerPerk = getPlayerPerkForPlayer(uuid,perk);
-            switch (playerPerk.getStatus()){
+            gui.setItem(perk.getGuiItemSlot(), perk.getGuiItem());
+            PlayerPerk playerPerk = getPlayerPerkForPlayer(uuid, perk);
+            switch (playerPerk.getStatus()) {
                 case ACTIVE:
-                    gui.setItem(perk.getToggleGuiItemSlot(),perkActivated);
+                    gui.setItem(perk.getToggleGuiItemSlot(), perkActivated);
                     break;
                 case NOT_ACTIVE:
-                    gui.setItem(perk.getToggleGuiItemSlot(),perkOwned);
+                    gui.setItem(perk.getToggleGuiItemSlot(), perkOwned);
                     break;
                 case NOT_OWNED:
-                    gui.setItem(perk.getToggleGuiItemSlot(),perkUnOwned);
+                    gui.setItem(perk.getToggleGuiItemSlot(), perkUnOwned);
                     break;
             }
         }
@@ -75,14 +76,13 @@ public class PerksManager {
 
     public void registerPlayerIfNotRegistered(UUID uuid) {
         if (!isPlayerRegistered(uuid)) {
-            PerkPlayer perkPlayer = new PerkPlayer(uuid, null);
+            PerkPlayer perkPlayer = new PerkPlayer(uuid, null, perkActivated, perkOwned, perkUnOwned);
             this.perkPlayers.add(perkPlayer);
-            perkPlayer.setPerkGUI(generatePerkInventoryForPlayer(uuid));
         }
     }
 
-    public void unregisterPlayerIfRegistered(UUID uuid){
-        if(isPlayerRegistered(uuid)){
+    public void unregisterPlayerIfRegistered(UUID uuid) {
+        if (isPlayerRegistered(uuid)) {
             this.perkPlayers.remove(getPerkPlayerByID(uuid));
         }
     }
@@ -96,33 +96,12 @@ public class PerksManager {
         return null;
     }
 
-    public void resetPlayerPerkGUI(UUID uuid) {
-        getPerkPlayerByID(uuid).setPerkGUI(generatePerkInventoryForPlayer(uuid));
-    }
-
     public void updatePlayerPerkGUISinglePerk(UUID uuid, int slot) {
         updatePerkInformationGUIItem(getPlayerPerkByToggleItem(uuid, slot), slot, getPerkPlayerByID(uuid).getPerkGUI());
     }
 
     public boolean updatePerkGUIItem(PlayerPerk playerPerk, int slot, UUID uuid) {
-
-        Inventory gui = getPerkPlayerByID(uuid).getPerkGUI();
-        switch (playerPerk.getStatus()) {
-            case NOT_ACTIVE:
-                gui.setItem(slot, perkActivated);
-                playerPerk.setStatus(PlayerPerkStatus.ACTIVE);
-                return true;
-            case ACTIVE:
-                if (playerPerk.isOwned()) {
-                    gui.setItem(slot, perkOwned);
-                    playerPerk.setStatus(PlayerPerkStatus.NOT_ACTIVE);
-                } else {
-                    gui.setItem(slot,perkUnOwned);
-                    playerPerk.setStatus(PlayerPerkStatus.NOT_OWNED);
-                }
-                return true;
-        }
-        return false;
+        return getPerkPlayerByID(uuid).updateGUIItem(playerPerk, slot);
     }
 
     private void updatePerkInformationGUIItem(PlayerPerk playerPerk, int slot, Inventory gui) {
@@ -142,18 +121,18 @@ public class PerksManager {
         return getPerkPlayerByID(uuid) != null;
     }
 
-    public void updateGUIToggleItems(){
+    public void updateGUIToggleItems() {
         ConfigFile config = instance.getConfigFile();
         String path = "perk.toggleItem";
-        if(config.isSet(path+".owned"))
-            this.perkOwned = new ItemBuilder(config.getItemStack(path+".owned")).build();
-        if(config.isSet(path+".unowned"))
-            this.perkUnOwned = new ItemBuilder(config.getItemStack(path+".unowned")).build();
-        if(config.isSet(path+".active"))
-            this.perkActivated = new ItemBuilder(config.getItemStack(path+".active")).build();
+        if (config.isSet(path + ".owned"))
+            this.perkOwned = new ItemBuilder(config.getItemStack(path + ".owned")).build();
+        if (config.isSet(path + ".unowned"))
+            this.perkUnOwned = new ItemBuilder(config.getItemStack(path + ".unowned")).build();
+        if (config.isSet(path + ".active"))
+            this.perkActivated = new ItemBuilder(config.getItemStack(path + ".active")).build();
     }
 
-    public void updatePotionEffects(Player player, PlayerPerk requestedPerk){
+    public void updatePotionEffects(Player player, PlayerPerk requestedPerk) {
         Perk perk = requestedPerk.getPerk();
         if (perk == Perk.FAST_RUN) {
             if (requestedPerk.isActive())
@@ -171,7 +150,7 @@ public class PerksManager {
             else
                 player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         } else if (perk == Perk.FLY) {
-            if (requestedPerk.isActive())
+            if (requestedPerk.isActive() && player.getGameMode() != GameMode.CREATIVE)
                 player.setAllowFlight(true);
             else
                 player.setAllowFlight(false);
@@ -198,12 +177,12 @@ public class PerksManager {
     }
 
     public void changePerkStatus(UUID playerID, Perk perk, PlayerPerkStatus status) {
-        getPlayerPerkForPlayer(playerID,perk).setStatus(status);
+        getPlayerPerkForPlayer(playerID, perk).setStatus(status);
     }
 
 
-    public boolean togglePerkStatus(UUID playerID, Perk perk){
-        return getPlayerPerkForPlayer(playerID,perk).togglePerkStatus();
+    public boolean togglePerkStatus(UUID playerID, Perk perk) {
+        return getPlayerPerkForPlayer(playerID, perk).togglePerkStatus();
     }
 
     public ArrayList<PlayerPerk> getAllOwnedPlayerPerksForPlayer(UUID playerID) {

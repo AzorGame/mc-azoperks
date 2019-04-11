@@ -31,34 +31,47 @@ public class ConfigFile extends PluginFile {
 
     public void updatePerks(){
         String path = "perk.";
+        System.out.println("UpdatePerk Test");
+        instance.getLogger().info("UpdatePerk Logger Test");
         for (Perk perk :
                 Perk.values()) {
+            System.out.println("Checking Path: "+path+perk.toString());
             if(cfg.isSet(path+perk.toString())){
                 String perkPath = path + perk.toString();
+                System.out.println("Updating Perk from Config1");
                 if(cfg.isSet(perkPath+".name")){
                     perk.setName(getColorTranslatedString(perkPath+".name"));
                 }
+                System.out.println("Updating Perk from Config2");
                 if(cfg.isSet(perkPath+".permission")){
                     perk.setPermissionString(cfg.getString(perkPath+".permission"));
                 }
+                System.out.println("Updating Perk from Config3");
                 if(cfg.isSet(perkPath+".guiItemSlot")){
                     perk.setGuiItemSlot(getInt(perkPath+".guiItemSlot"));
                 }
+                System.out.println("Updating Perk from Config4");
                 if(cfg.isSet(perkPath+".toggleGuiItemSlot")){
                     perk.setToggleGuiItemSlot(getInt(perkPath+".toggleGuiItemSlot"));
                 }
+                System.out.println("Updating Perk from Config5");
                 if(cfg.isSet(perkPath+".item")){
                     perk.setGuiItem(getItemStack(perkPath+".item"));
                 }
+                System.out.println("Updating Perk from Config6");
                 if(cfg.isSet(perkPath+".activeArea")){
                     try {
                         perk.getPerkAreaManager().setActiveArea(PerkArea.valueOf(cfg.getString(perkPath+".activeArea").toUpperCase()));
+                        System.out.println("-----");
+                        System.out.println(perk);
+                        System.out.println("-----");
                     } catch (IllegalArgumentException e) {
                         instance.getLogger().info("Invalid PerksArea found in the file: "
                                 + file.getAbsolutePath() + ". At the path: "
                                 + perkPath+".activeArea . Try see the documentation for valid values. For example: GLOBAL, PLOT");
                     }
                 }
+                System.out.println("Updating Perk from Config7");
                 if(cfg.isSet(perkPath+".activeWorlds")){
                     perk.getPerkAreaManager().setPerkActiveWorlds(getStringList(perkPath+".activeWorlds"));
                 }

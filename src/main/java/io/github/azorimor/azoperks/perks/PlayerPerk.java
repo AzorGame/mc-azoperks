@@ -62,4 +62,14 @@ public class PlayerPerk {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Perk: ").append(perk.toStringConsole()).append("\n")
+                .append("Active: ").append(isActive).append("\n")
+                .append("Owned: ").append(isOwned).append("\n")
+                .append("Status: ").append(status);
+        return builder.toString();
+    }
 }

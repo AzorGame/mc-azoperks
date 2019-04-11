@@ -34,9 +34,8 @@ public class LJoinQuit implements Listener {
             player.removePotionEffect(PotionEffectType.NIGHT_VISION);
         if(player.hasPotionEffect(PotionEffectType.FAST_DIGGING) && !perksManager.getPerkPlayerByID(player.getUniqueId()).isPlayerPerkActive(Perk.FAST_MINING))
             player.removePotionEffect(PotionEffectType.FAST_DIGGING);
-        if(player.getGameMode() != GameMode.CREATIVE || !perksManager.getPerkPlayerByID(player.getUniqueId()).isPlayerPerkActive(Perk.FLY))
+        if(player.getGameMode() != GameMode.CREATIVE && !perksManager.getPerkPlayerByID(player.getUniqueId()).isPlayerPerkActive(Perk.FLY))
             player.setAllowFlight(false); //TODO evtl hier nochmal mit fliegen schauen, ob das auch so passt
-
     }
 
     @EventHandler

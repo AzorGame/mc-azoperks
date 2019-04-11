@@ -4,8 +4,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,12 +20,19 @@ public class PerkPlayer {
     private UUID playerUUID;
     private Player player;
 
+    private ItemStack perkActivated, perkOwned, perkUnOwned;
 
-    public PerkPlayer(UUID playerUUID, Inventory perkGUI) { //TODO gui hier automatisch generieren
+
+    public PerkPlayer(UUID playerUUID, Inventory perkGUI, ItemStack perkActivated, ItemStack perkOwned, ItemStack perkUnOwned) { //TODO gui hier automatisch generieren
         this.playerUUID = playerUUID;
         this.perks = loadPlayerPerks();
         this.perkGUI = perkGUI;
         this.player = Bukkit.getPlayer(playerUUID);
+
+        this.perkActivated = perkActivated;
+        this.perkOwned = perkOwned;
+        this.perkUnOwned = perkUnOwned;
+        this.perkGUI = generatePerkInventoryForPlayer(PerksManager.GUI_NAME);
     }
 
     /**
@@ -71,6 +80,65 @@ public class PerkPlayer {
 
     public boolean isPlayerPerkActive(Perk perk){
         return getPlayerPerk(perk).isActive() && perk.getPerkAreaManager().isPerkUsedInAllowedArea(player);
+    }
+
+    public List<PlayerPerk> updatePerkAllowedActive(){
+        List<PlayerPerk> disabledPerks = new ArrayList<PlayerPerk>(5);
+
+        for (PlayerPerk playerPerk : perks) {
+            if(!playerPerk.getPerk().getPerkAreaManager().isPerkUsedInAllowedArea(player)){
+                disabledPerks.add(playerPerk);
+                playerPerk.togglePerkStatus();
+            }
+            System.out.println(playerPerk);
+            System.out.println("Allowed Perk Usage: "+ playerPerk.getPerk().getPerkAreaManager().isPerkUsedInAllowedArea(player));
+        }
+        this.perkGUI = generatePerkInventoryForPlayer(PerksManager.GUI_NAME);
+        return disabledPerks;
+    }
+
+
+    public boolean updateGUIItem(PlayerPerk playerPerk, int slot){
+
+        switch (playerPerk.getStatus()) {
+            case NOT_ACTIVE:
+                perkGUI.setItem(slot, perkActivated);
+                playerPerk.setStatus(PlayerPerkStatus.ACTIVE);
+                return true;
+            case ACTIVE:
+                if (playerPerk.isOwned()) {
+                    perkGUI.setItem(slot, perkOwned);
+                    playerPerk.setStatus(PlayerPerkStatus.NOT_ACTIVE);
+                } else {
+                    perkGUI.setItem(slot,perkUnOwned);
+                    playerPerk.setStatus(PlayerPerkStatus.NOT_OWNED);
+                }
+                return true;
+        }
+        return false;
+    }
+
+
+    public Inventory generatePerkInventoryForPlayer(String guiName) {
+        Inventory gui = Bukkit.createInventory(null, 54, guiName);
+
+        for (Perk perk :
+                Perk.values()) {
+            gui.setItem(perk.getGuiItemSlot(),perk.getGuiItem());
+            PlayerPerk playerPerk = getPlayerPerk(perk);
+            switch (playerPerk.getStatus()){
+                case ACTIVE:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkActivated);
+                    break;
+                case NOT_ACTIVE:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkOwned);
+                    break;
+                case NOT_OWNED:
+                    gui.setItem(perk.getToggleGuiItemSlot(),perkUnOwned);
+                    break;
+            }
+        }
+        return gui;
     }
 
     //<editor-fold desc="Getter and Setter">

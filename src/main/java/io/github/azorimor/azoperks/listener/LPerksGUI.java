@@ -1,7 +1,6 @@
 package io.github.azorimor.azoperks.listener;
 
 import io.github.azorimor.azoperks.AzoPerks;
-import io.github.azorimor.azoperks.perks.Perk;
 import io.github.azorimor.azoperks.perks.PerksManager;
 import io.github.azorimor.azoperks.perks.PlayerPerk;
 import io.github.azorimor.azoperks.utils.MessageHandler;
@@ -12,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 /**
  * Manages the Perks GUI interaction.
@@ -41,12 +38,16 @@ public class LPerksGUI implements Listener {
                         || clickedItem.equals(perksManager.getPerkUnOwned())) {
                     Player player = (Player) event.getWhoClicked();
                     PlayerPerk requestedPerk = perksManager.getPlayerPerkByToggleItem(player.getUniqueId(), clickedSlot);
-                    if (perksManager.updatePerkGUIItem(requestedPerk, clickedSlot, player.getUniqueId())) {
-                        perksManager.updatePotionEffects(player,requestedPerk);
-                        messageHandler.sendPerkChangeStatusSuccess(player, requestedPerk);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
+                    if (requestedPerk.getPerk().getPerkAreaManager().isPerkUsedInAllowedArea(player)) {
+                        if (perksManager.updatePerkGUIItem(requestedPerk, clickedSlot, player.getUniqueId())) {
+                            perksManager.updatePotionEffects(player,requestedPerk);
+                            messageHandler.sendPerkChangeStatusSuccess(player, requestedPerk);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
+                        } else {
+                            messageHandler.sendPerkChangeStatusFailure(player, requestedPerk);
+                        }
                     } else {
-                        messageHandler.sendPerkChangeStatusFailure(player, requestedPerk);
+                        messageHandler.sendPluginMessage(player, "You are not allowed to use the perk here.");
                     }
                 }
                 event.setCancelled(true);

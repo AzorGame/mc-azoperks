@@ -159,4 +159,16 @@ public enum Perk {
     public void setPerkAreaManager(PerkAreaManager perkAreaManager) {
         this.perkAreaManager = perkAreaManager;
     }
+
+
+    public String toStringConsole() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Name: ").append(name).append("\n")
+                .append("Permission: ").append(permissionString).append("\n")
+                .append("GUI-Item: ").append(guiItem).append("\n")
+                .append("GUI-Item Slot: ").append(guiItemSlot).append("\n")
+                .append("Toggle GUI-Item Slot: ").append(toggleGuiItemSlot).append("\n")
+                .append("PerkareaManager: ").append(perkAreaManager).append("\n");
+        return builder.toString();
+    }
 }
